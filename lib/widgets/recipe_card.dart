@@ -1,8 +1,6 @@
-// lib/widgets/recipe_card.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'popup_recipe.dart'; // Impor file popup_recipe.dart
+import 'popup_recipe.dart';
 
 class RecipeCard extends StatefulWidget {
   final String imageUrl;
@@ -28,14 +26,19 @@ class _RecipeCardState extends State<RecipeCard> {
   void _showPopup() {
     showDialog(
       context: context,
-      barrierDismissible:
-          false, // Membuat popup tidak bisa ditutup dengan menekan di luar
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return PopupRecipe(
           imageUrl: widget.imageUrl,
           title: widget.title,
-          calories: widget.calories,
           time: widget.time,
+          description:
+              "Hidangan khas Minang dengan daging sapi yang dimasak lama dengan santan dan bumbu rempah.",
+          ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
+          instructions: [
+            "Step 1: Do this",
+            "Step 2: Do that",
+          ],
         );
       },
     );
@@ -51,7 +54,6 @@ class _RecipeCardState extends State<RecipeCard> {
       color: const Color(0xFFFFFFFF),
       child: GestureDetector(
         onTap: () {
-          // Detect tap on the card (except for the heart icon)
           _showPopup();
         },
         child: Padding(
@@ -76,7 +78,7 @@ class _RecipeCardState extends State<RecipeCard> {
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          isIconPressed = !isIconPressed; // Ganti status ikon
+                          isIconPressed = !isIconPressed;
                         });
                       },
                       child: Container(
