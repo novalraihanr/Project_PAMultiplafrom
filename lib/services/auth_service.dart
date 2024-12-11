@@ -90,4 +90,13 @@ class AuthService {
     }
   }
 
+  void handleGoogleSignIn() {
+    try {
+      GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
+      FirebaseAuth.instance.signInWithProvider(googleAuthProvider);
+    } catch (e) {
+      print(e);
+    }
+  }
+
 }

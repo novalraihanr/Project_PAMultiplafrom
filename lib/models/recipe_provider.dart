@@ -34,7 +34,6 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void _listenToFavRecipes() {
-    print('ini user: $currentUser');
     _favRecipeStream = _dbRef.child(FAV_RECIPE_PATH).child(currentUser!).child('favorite').onValue.listen((event) {
         final Map<String, dynamic> recipes = Map<String, dynamic>.from(event.snapshot.value as Map);
         _favoriteRecipes = recipes.values.map((asJson) => Recipe.fromRTDB(Map<String, dynamic>.from(asJson))).toList();

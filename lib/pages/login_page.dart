@@ -233,7 +233,7 @@ class LoginPage extends StatelessWidget {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              // INI LOGIN GOOGLE
+                              AuthService().handleGoogleSignIn();
                             },
                             icon: SvgPicture.asset(
                               'assets/icons/google_icon.svg',

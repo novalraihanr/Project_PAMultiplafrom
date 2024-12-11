@@ -33,4 +33,6 @@ class RecipeController {
     final db = FirebaseDatabase.instance.ref().child('users').child(user).child('favorite');
     await db.child(namaMakanan).remove();
   }
+
+  
 }
