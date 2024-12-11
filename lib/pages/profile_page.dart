@@ -1,3 +1,4 @@
+import 'package:app_resep_makanan/services/auth_service.dart';
 import 'package:app_resep_makanan/widgets/recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,11 +28,11 @@ class ProfilePage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Spacer(), 
+                  const Spacer(),
                   IconButton(
                     icon: SvgPicture.asset(
-                      'assets/icons/setting.svg',  
-                      width: 24.0,  
+                      'assets/icons/setting.svg',
+                      width: 24.0,
                       height: 24.0,
                     ),
                     onPressed: () {
@@ -51,12 +52,12 @@ class ProfilePage extends StatelessWidget {
                     BoxShadow(
                       color: Colors.black,
                       blurRadius: 5.0,
-                      offset: Offset(0, 4), 
+                      offset: Offset(0, 4),
                     ),
                     BoxShadow(
                       color: Colors.black,
                       blurRadius: 5.0,
-                      offset: Offset(4, 0), 
+                      offset: Offset(4, 0),
                     ),
                     BoxShadow(
                       color: Colors.black,
@@ -72,15 +73,15 @@ class ProfilePage extends StatelessWidget {
                     const CircleAvatar(
                       radius: 30.0,
                       backgroundImage: NetworkImage(
-                        'https://cdn-icons-png.flaticon.com/512/9385/9385289.png', 
+                        'https://cdn-icons-png.flaticon.com/512/9385/9385289.png',
                       ),
                     ),
-                  
+
                     const Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(left: 10.0), 
+                        padding: EdgeInsets.only(left: 10.0),
                         child: Text(
-                          'Nama', 
+                          'Nama',
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 18.0,
@@ -92,7 +93,7 @@ class ProfilePage extends StatelessWidget {
 
                     TextButton(
                       onPressed: () {
-                        // INI LOGOUT
+                        AuthService().signOut(context: context);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.red, // Background merah
@@ -129,7 +130,7 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10.0),
-            
+
               GridView.builder(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 physics: const NeverScrollableScrollPhysics(),

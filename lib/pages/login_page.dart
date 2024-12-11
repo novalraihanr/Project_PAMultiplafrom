@@ -1,10 +1,15 @@
 import 'package:app_resep_makanan/pages/create_acc.dart';
 import 'package:app_resep_makanan/pages/landing_page.dart';
+import 'package:app_resep_makanan/services/auth_service.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginPage extends StatelessWidget {
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +63,7 @@ class LoginPage extends StatelessWidget {
                     fontFamily: 'Poppins',
                     color: const Color(0xFF111827).withOpacity(0.5),
                   ),
-                  textAlign: TextAlign.center, 
+                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 60),
@@ -79,6 +84,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xFFF9FAFB),
@@ -120,6 +126,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: const Color(0xFFF9FAFB),
@@ -161,9 +168,8 @@ class LoginPage extends StatelessWidget {
                       width: double.infinity,
                       height: 50,
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                                  context, '/home');
+                        onPressed: () async {
+                          await AuthService().signIn(context: context, email: _emailController.text, password: _passwordController.text);
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: const Color(0xFF70B9BE),

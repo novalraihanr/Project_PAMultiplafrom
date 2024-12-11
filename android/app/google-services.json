@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "702035720337",
+    "project_id": "flutterproject-d0511",
+    "storage_bucket": "flutterproject-d0511.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702035720337:android:9860a77a98f56f0f522730",
+        "android_client_info": {
+          "package_name": "com.example.app_resep_makanan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702035720337-eehj9k14r9g8lbqd1h8aldi6tqcac37p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJKosMStR4d2YgZHXZHvThckTG_vrBObQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702035720337-eehj9k14r9g8lbqd1h8aldi6tqcac37p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
