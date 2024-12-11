@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   Future<void> signUp({
@@ -90,10 +91,24 @@ class AuthService {
     }
   }
 
-  void handleGoogleSignIn() {
+  void handleGoogleSignIn(
+    {
+      required BuildContext context
+    }
+  ) async {
     try {
-      GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
-      FirebaseAuth.instance.signInWithProvider(googleAuthProvider);
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
+      final cred = GoogleAuthProvider.credential(idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+
+      await FirebaseAuth.instance.signInWithCredential(cred);
+
+      String user = FirebaseAuth.instance.currentUser!.displayName.toString();
+      FirebaseDatabase.instance.ref().child('users').child(user).set({"nama": user});
+
+      await Future.delayed(const Duration(seconds: 1));
+      Navigator.pushReplacementNamed(
+        context, '/home');
     } catch (e) {
       print(e);
     }
