@@ -38,6 +38,8 @@ flutter:
     - assets/icons/black_search.svg
     - assets/icons/setting.svg
     - assets/icons/rectangle.svg
+    - assets/icons/home.svg
+    - assets/icons/profile.svg
 
   fonts:
     - family: Poppins

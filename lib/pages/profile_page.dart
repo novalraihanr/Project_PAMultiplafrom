@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -42,13 +41,13 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 30.0),
-
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 20.0),
                 margin: const EdgeInsets.only(bottom: 20.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
                       color: Colors.black,
                       blurRadius: 5.0,
@@ -60,8 +59,8 @@ class ProfilePage extends StatelessWidget {
                       offset: Offset(4, 0),
                     ),
                     BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 5.0,
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 2.0,
                       offset: Offset(-4, 0),
                     ),
                   ],
@@ -90,13 +89,12 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     TextButton(
                       onPressed: () {
                         AuthService().signOut(context: context);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: Colors.red, // Background merah
+                        backgroundColor: Colors.red,
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -105,11 +103,10 @@ class ProfilePage extends StatelessWidget {
                       child: const Text(
                         'Logout',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold
-                        ),
+                            color: Colors.white,
+                            fontFamily: 'Poppins',
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
