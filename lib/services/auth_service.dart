@@ -11,9 +11,9 @@ class AuthService {
     required String password
   }) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value) => value.user?.updateDisplayName(name));
 
-      await FirebaseDatabase.instance.ref('users').push()
+      FirebaseDatabase.instance.ref().child('users').child(name).set({"nama": name});
 
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacementNamed(context, '/home');
@@ -79,6 +79,15 @@ class AuthService {
     await Future.delayed(const Duration(seconds: 1));
     Navigator.pushReplacementNamed(
         context, '/login');
+  }
+
+  Future<String?> getCurrentUser() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return null;
+    } else {
+      return user.displayName;
+    }
   }
 
 }

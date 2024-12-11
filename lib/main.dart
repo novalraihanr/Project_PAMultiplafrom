@@ -1,5 +1,6 @@
 import 'package:app_resep_makanan/models/recipe_provider.dart';
 import 'package:app_resep_makanan/widgets/recipe_card.dart';
+import 'package:app_resep_makanan/widgets/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/home_page.dart';
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          '/': (context) => LandingPage(),
+          '/': (context) => const Wrapper(),
+          '/landing': (context) => LandingPage(),
           '/home': (context) => HomePage(),
           '/login': (context) => LoginPage(),
           '/createacc': (context) => CreateAcc(),

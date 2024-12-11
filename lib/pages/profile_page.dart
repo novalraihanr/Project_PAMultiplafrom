@@ -1,7 +1,9 @@
+import 'package:app_resep_makanan/models/recipe_provider.dart';
 import 'package:app_resep_makanan/services/auth_service.dart';
 import 'package:app_resep_makanan/widgets/recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   @override
@@ -76,18 +78,22 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
 
-                    const Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          'Nama',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                    FutureBuilder<String?>(
+                      future: AuthService().getCurrentUser(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data ?? 'Nama',
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
                     ),
                     TextButton(
                       onPressed: () {
@@ -128,27 +134,35 @@ class ProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 10.0),
 
-              GridView.builder(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 2,
-                  mainAxisSpacing: 10.0,
-                  childAspectRatio: 0.8,
-                ),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  // return RecipeCard(
-                  //   imageUrl:
-                  //       'https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/233/2024/04/28/Rendang-206972355.jpg',
-                  //   title: 'Resep ${index + 1}',
-                  //   calories: '${100 + index * 50}',
-                  //   time: '${10 + index * 5} min',
-                  // );
-                },
-              ),
+              Consumer<RecipeProvider>(builder: (context, value, child) {
+              return value.favoriteRecipes.isEmpty
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 20.0,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemCount: value.favoriteRecipes.length,
+                      itemBuilder: (context, index) {
+                        final recipe = value.favoriteRecipes[index];
+                        return RecipeCard(
+                          imageUrl: recipe.urlGambar,
+                          title: recipe.namaMakanan,
+                          calories: recipe.kalori.toString(),
+                          time: recipe.waktuMasak.toString(),
+                          description: recipe.deskripsiMasakan,
+                          ingredients: recipe.bahan,
+                          instructions: recipe.instruksi,
+                        );
+                      },
+                    );
+              }),
             ],
           ),
         ),

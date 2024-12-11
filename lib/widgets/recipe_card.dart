@@ -1,3 +1,6 @@
+import 'package:app_resep_makanan/services/auth_service.dart';
+import 'package:app_resep_makanan/services/recipe_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'popup_recipe.dart';
@@ -28,6 +31,7 @@ class RecipeCard extends StatefulWidget {
 
 class _RecipeCardState extends State<RecipeCard> {
   bool isIconPressed = false;
+  String? currentUser = FirebaseAuth.instance.currentUser?.displayName;
 
   void _showPopup() {
     showDialog(
@@ -82,6 +86,11 @@ class _RecipeCardState extends State<RecipeCard> {
                         setState(() {
                           isIconPressed = !isIconPressed;
                         });
+                        if(isIconPressed){
+                          RecipeController().addFavoriteRecipe(currentUser: currentUser, namaMakanan: widget.title, deskripsiMasakan: widget.description, waktuMasak: widget.time, kalori: widget.calories, bahan: widget.ingredients, instruksi: widget.instructions, urlGambar: widget.imageUrl);
+                        }else {
+                          RecipeController().removeFavoriteRecipe(currentUser: currentUser, namaMakanan: widget.title);
+                        }
                       },
                       child: Container(
                         height: 30.0,

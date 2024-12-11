@@ -1,4 +1,5 @@
 import 'package:app_resep_makanan/models/recipe_provider.dart';
+import 'package:app_resep_makanan/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -111,15 +112,26 @@ class HomeContent extends StatelessWidget {
                 ),
               ],
             ),
-            const Text(
-              'Nama User',
-              style: TextStyle(
-                fontSize: 40.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Poppins',
-                height: 1.5,
-              ),
-              textAlign: TextAlign.start,
+            FutureBuilder<String?>(
+              future: AuthService().getCurrentUser(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return const Text('Error loading user');
+                } else {
+                  return Text(
+                    snapshot.data ?? 'Nama User',
+                    style: const TextStyle(
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.start,
+                  );
+                }
+              },
             ),
             const SizedBox(height: 30.0),
             const Text(

@@ -9,6 +9,7 @@ class CreateAcc extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +85,7 @@ class CreateAcc extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     TextField(
+                      controller: _nameController,
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xFFF9FAFB),
@@ -210,7 +212,7 @@ class CreateAcc extends StatelessWidget {
                       height: 50,
                       child: TextButton(
                         onPressed: () async {
-                          await AuthService().signUp(context: context ,email: _emailController.text, password: _passwordController.text);
+                          await AuthService().signUp(context: context ,email: _emailController.text, password: _passwordController.text, name: _nameController.text);
                         },
                         style: TextButton.styleFrom(
                           backgroundColor: const Color(0xFF70B9BE),
