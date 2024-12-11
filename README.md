@@ -1,5 +1,5 @@
 # Aplikasi Resep Makanan
-## Pengembangan Aplikasi Multiplatform - B
+## Pengembangan Aplikasi Multiplatform - A
 
 Kelompok 1
 
