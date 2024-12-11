@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AuthService {
   Future<void> signUp({
     required BuildContext context,
+    required String name,
     required String email,
     required String password
   }) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+
+      await FirebaseDatabase.instance.ref('users').push()
 
       await Future.delayed(const Duration(seconds: 1));
       Navigator.pushReplacementNamed(context, '/home');

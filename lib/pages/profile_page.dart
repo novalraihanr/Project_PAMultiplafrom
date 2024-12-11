@@ -140,13 +140,13 @@ class ProfilePage extends StatelessWidget {
                 ),
                 itemCount: 6,
                 itemBuilder: (context, index) {
-                  return RecipeCard(
-                    imageUrl:
-                        'https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/233/2024/04/28/Rendang-206972355.jpg',
-                    title: 'Resep ${index + 1}',
-                    calories: '${100 + index * 50}',
-                    time: '${10 + index * 5} min',
-                  );
+                  // return RecipeCard(
+                  //   imageUrl:
+                  //       'https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/233/2024/04/28/Rendang-206972355.jpg',
+                  //   title: 'Resep ${index + 1}',
+                  //   calories: '${100 + index * 50}',
+                  //   time: '${10 + index * 5} min',
+                  // );
                 },
               ),
             ],

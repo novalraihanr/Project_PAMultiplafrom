@@ -64,6 +64,7 @@ class DefaultFirebaseOptions {
     appId: '1:702035720337:android:9860a77a98f56f0f522730',
     messagingSenderId: '702035720337',
     projectId: 'flutterproject-d0511',
+    databaseURL: 'https://flutterproject-d0511-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'flutterproject-d0511.firebasestorage.app',
   );
 

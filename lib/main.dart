@@ -1,3 +1,5 @@
+import 'package:app_resep_makanan/models/recipe_provider.dart';
+import 'package:app_resep_makanan/widgets/recipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'pages/home_page.dart';
@@ -16,10 +18,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CategoryModel(),
-      child: const MyApp(),
-    ),
+    const MyApp()
   );
 }
 
@@ -27,17 +26,25 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => LandingPage(),
-        '/home': (context) => HomePage(),
-        '/login': (context) => LoginPage(),
-        '/createacc': (context) => CreateAcc(),
-        '/search': (context) => SearchPage(),
-        '/profile': (context) => ProfilePage(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<CategoryModel>(create: (_) => CategoryModel()),
+        ChangeNotifierProvider<RecipeProvider>(create: (_) => RecipeProvider()),
+      ],
+      child: Builder(builder: (BuildContext context) {
+        return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => LandingPage(),
+          '/home': (context) => HomePage(),
+          '/login': (context) => LoginPage(),
+          '/createacc': (context) => CreateAcc(),
+          '/search': (context) => SearchPage(),
+          '/profile': (context) => ProfilePage(),
+          },
+        );
+      }),
     );
   }
 }

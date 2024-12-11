@@ -1,3 +1,4 @@
+import 'package:app_resep_makanan/models/recipe_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -164,26 +165,35 @@ class HomeContent extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10.0),
-            GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 20.0,
-                childAspectRatio: 0.8,
-              ),
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return RecipeCard(
-                  imageUrl:
-                      'https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/233/2024/04/28/Rendang-206972355.jpg',
-                  title: 'Resep ${index + 1}',
-                  calories: '${100 + index * 50}',
-                  time: '${10 + index * 5} min',
-                );
-              },
-            ),
+            Consumer<RecipeProvider>(builder: (context, value, child) {
+              return value.recipes.isEmpty
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 20.0,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemCount: value.recipes.length,
+                      itemBuilder: (context, index) {
+                        final recipe = value.recipes[index];
+                        return RecipeCard(
+                          imageUrl: recipe.urlGambar,
+                          title: recipe.namaMakanan,
+                          calories: recipe.kalori.toString(),
+                          time: recipe.waktuMasak.toString(),
+                          description: recipe.deskripsiMasakan,
+                          ingredients: recipe.bahan,
+                          instructions: recipe.instruksi,
+                        );
+                      },
+                    );
+            }),
             const SizedBox(height: 30.0),
           ],
         ),

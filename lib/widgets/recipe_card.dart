@@ -7,6 +7,9 @@ class RecipeCard extends StatefulWidget {
   final String title;
   final String calories;
   final String time;
+  final String description;
+  final List<String> ingredients;
+  final List<String> instructions;
 
   const RecipeCard({
     Key? key,
@@ -14,6 +17,9 @@ class RecipeCard extends StatefulWidget {
     required this.title,
     required this.calories,
     required this.time,
+    required this.description,
+    required this.ingredients,
+    required this.instructions,
   }) : super(key: key);
 
   @override
@@ -32,13 +38,9 @@ class _RecipeCardState extends State<RecipeCard> {
           imageUrl: widget.imageUrl,
           title: widget.title,
           time: widget.time,
-          description:
-              "Hidangan khas Minang dengan daging sapi yang dimasak lama dengan santan dan bumbu rempah.",
-          ingredients: ["Ingredient 1", "Ingredient 2", "Ingredient 3"],
-          instructions: [
-            "Step 1: Do this",
-            "Step 2: Do that",
-          ],
+          description: widget.description,
+          ingredients: widget.ingredients,
+          instructions: widget.instructions,
         );
       },
     );
