@@ -1,4 +1,4 @@
-import 'package:app_resep_makanan/services/auth_service.dart';
+import 'package:app_resep_makanan/models/favorite_service.dart';
 import 'package:app_resep_makanan/services/recipe_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class RecipeCard extends StatefulWidget {
   final List<String> instructions;
 
   const RecipeCard({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.title,
     required this.calories,
@@ -23,7 +23,7 @@ class RecipeCard extends StatefulWidget {
     required this.description,
     required this.ingredients,
     required this.instructions,
-  }) : super(key: key);
+  });
 
   @override
   _RecipeCardState createState() => _RecipeCardState();
@@ -32,6 +32,20 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   bool isIconPressed = false;
   String? currentUser = FirebaseAuth.instance.currentUser?.displayName;
+  final FavoriteService favoriteService = FavoriteService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteStatus();
+  }
+
+  void _loadFavoriteStatus() async {
+    bool status = await favoriteService.getFavoriteStatus(widget.title);
+    setState(() {
+      isIconPressed = status;
+    });
+  }
 
   void _showPopup() {
     showDialog(
@@ -48,6 +62,32 @@ class _RecipeCardState extends State<RecipeCard> {
         );
       },
     );
+  }
+
+  void _toggleFavorite() async {
+    setState(() {
+      isIconPressed = !isIconPressed;
+    });
+
+    await favoriteService.setFavoriteStatus(widget.title, isIconPressed);
+
+    if (isIconPressed) {
+      RecipeController().addFavoriteRecipe(
+        currentUser: currentUser,
+        namaMakanan: widget.title,
+        deskripsiMasakan: widget.description,
+        waktuMasak: widget.time,
+        kalori: widget.calories,
+        bahan: widget.ingredients,
+        instruksi: widget.instructions,
+        urlGambar: widget.imageUrl,
+      );
+    } else {
+      RecipeController().removeFavoriteRecipe(
+        currentUser: currentUser,
+        namaMakanan: widget.title,
+      );
+    }
   }
 
   @override
@@ -82,16 +122,7 @@ class _RecipeCardState extends State<RecipeCard> {
                     top: 8.0,
                     right: 8.0,
                     child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isIconPressed = !isIconPressed;
-                        });
-                        if(isIconPressed){
-                          RecipeController().addFavoriteRecipe(currentUser: currentUser, namaMakanan: widget.title, deskripsiMasakan: widget.description, waktuMasak: widget.time, kalori: widget.calories, bahan: widget.ingredients, instruksi: widget.instructions, urlGambar: widget.imageUrl);
-                        }else {
-                          RecipeController().removeFavoriteRecipe(currentUser: currentUser, namaMakanan: widget.title);
-                        }
-                      },
+                      onTap: _toggleFavorite,
                       child: Container(
                         height: 30.0,
                         width: 30.0,
@@ -121,18 +152,20 @@ class _RecipeCardState extends State<RecipeCard> {
                 ],
               ),
               const SizedBox(height: 8.0),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  widget.title,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Poppins',
+              SizedBox(
+                height: 60.0,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -148,7 +181,7 @@ class _RecipeCardState extends State<RecipeCard> {
                       Text(
                         '${widget.calories} Kcal',
                         style: const TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 11.0,
                           color: Color(0xFF97A2B0),
                           fontFamily: 'Poppins',
                         ),
@@ -168,7 +201,7 @@ class _RecipeCardState extends State<RecipeCard> {
                       Text(
                         widget.time,
                         style: const TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 11.0,
                           color: Color(0xFF97A2B0),
                           fontFamily: 'Poppins',
                         ),

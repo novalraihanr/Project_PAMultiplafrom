@@ -1,5 +1,3 @@
-import 'package:app_resep_makanan/models/bahan_model.dart';
-import 'package:app_resep_makanan/models/instruksi_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,14 +10,14 @@ class PopupRecipe extends StatefulWidget {
   final List<String> instructions;
 
   const PopupRecipe({
-    Key? key,
+    super.key,
     required this.imageUrl,
     required this.title,
     required this.time,
     required this.description,
     required this.ingredients,
     required this.instructions,
-  }) : super(key: key);
+  });
 
   @override
   _PopupRecipeState createState() => _PopupRecipeState();
@@ -27,7 +25,7 @@ class PopupRecipe extends StatefulWidget {
 
 class _PopupRecipeState extends State<PopupRecipe> {
   bool showIngredients = true;
-  bool isFavorite = false;
+  bool isIconPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +96,11 @@ class _PopupRecipeState extends State<PopupRecipe> {
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            isFavorite = !isFavorite;
+                            isIconPressed = !isIconPressed;
                           });
                         },
                         child: SvgPicture.asset(
-                          isFavorite
+                          isIconPressed
                               ? 'assets/icons/blue_heart.svg'
                               : 'assets/icons/heart.svg',
                           height: 25.0,

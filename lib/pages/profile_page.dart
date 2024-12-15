@@ -6,13 +6,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: [
               const SizedBox(height: 70.0),
@@ -51,13 +53,13 @@ class ProfilePage extends StatelessWidget {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 5.0,
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 2.0,
                       offset: Offset(0, 4),
                     ),
                     BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 5.0,
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 2.0,
                       offset: Offset(4, 0),
                     ),
                     BoxShadow(
@@ -77,23 +79,26 @@ class ProfilePage extends StatelessWidget {
                         'https://cdn-icons-png.flaticon.com/512/9385/9385289.png',
                       ),
                     ),
-
-                    FutureBuilder<String?>(
-                      future: AuthService().getCurrentUser(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            snapshot.data ?? 'Nama',
-                            style: const TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        } else {
-                          return const CircularProgressIndicator();
-                        }
-                      },
+                    const SizedBox(width: 10.0),
+                    Expanded(
+                      child: FutureBuilder<String?>(
+                        future: AuthService().getCurrentUser(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              snapshot.data ?? 'Nama',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
                     ),
                     TextButton(
                       onPressed: () {
@@ -132,36 +137,36 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 10.0),
-
               Consumer<RecipeProvider>(builder: (context, value, child) {
-              return value.favoriteRecipes.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 20.0,
-                        childAspectRatio: 0.8,
-                      ),
-                      itemCount: value.favoriteRecipes.length,
-                      itemBuilder: (context, index) {
-                        final recipe = value.favoriteRecipes[index];
-                        return RecipeCard(
-                          imageUrl: recipe.urlGambar,
-                          title: recipe.namaMakanan,
-                          calories: recipe.kalori.toString(),
-                          time: recipe.waktuMasak.toString(),
-                          description: recipe.deskripsiMasakan,
-                          ingredients: recipe.bahan,
-                          instructions: recipe.instruksi,
-                        );
-                      },
-                    );
+                return value.favoriteRecipes.isEmpty
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 2.0,
+                          mainAxisSpacing: 10.0,
+                          childAspectRatio: 0.8,
+                        ),
+                        itemCount: value.favoriteRecipes.length,
+                        itemBuilder: (context, index) {
+                          final recipe = value.favoriteRecipes[index];
+                          return RecipeCard(
+                            key: ValueKey(recipe.namaMakanan),
+                            imageUrl: recipe.urlGambar,
+                            title: recipe.namaMakanan,
+                            calories: recipe.kalori.toString(),
+                            time: recipe.waktuMasak.toString(),
+                            description: recipe.deskripsiMasakan,
+                            ingredients: recipe.bahan,
+                            instructions: recipe.instruksi,
+                          );
+                        },
+                      );
               }),
             ],
           ),

@@ -11,6 +11,8 @@ class CreateAcc extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
+  CreateAcc({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

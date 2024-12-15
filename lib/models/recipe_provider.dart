@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 class RecipeProvider extends ChangeNotifier {
   List<Recipe> _recipes = [];
   List<Recipe> _favoriteRecipes = [];
-  String? currentUser = FirebaseAuth.instance.currentUser?.displayName;
+  String? currentUser = FirebaseAuth.instance.currentUser?.displayName; 
   final _dbRef = FirebaseDatabase.instance.ref();
 
   static const String RECIPE_PATH = 'recipe';
@@ -38,7 +38,7 @@ class RecipeProvider extends ChangeNotifier {
         final Map<String, dynamic> recipes = Map<String, dynamic>.from(event.snapshot.value as Map);
         _favoriteRecipes = recipes.values.map((asJson) => Recipe.fromRTDB(Map<String, dynamic>.from(asJson))).toList();
       notifyListeners();
-    });
+    }); 
   }
 
   @override

@@ -7,16 +7,16 @@ class BottomNavbar extends StatelessWidget {
   const BottomNavbar({
     required this.onTabSelected,
     required this.selectedIndex,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      shape: CircularNotchedRectangle(),
+      shape: const CircularNotchedRectangle(),
       color: Colors.white,
       notchMargin: 10,
-      child: Container(
+      child: SizedBox(
         height: 60,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -47,7 +47,7 @@ class BottomNavbar extends StatelessWidget {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -81,8 +81,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   Widget buttonAdd() {
     return FloatingActionButton(
       onPressed: () {},
-      child: Icon(Icons.add),
       backgroundColor: Colors.blue,
+      child: Icon(Icons.add),
     );
   }
 
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         body: Center(
           child: Text(
             'Tab $_selectedIndex Selected',
-            style: TextStyle(fontSize: 24),
+            style: const TextStyle(fontSize: 24),
           ),
         ),
         bottomNavigationBar: BottomNavbar(

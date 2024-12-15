@@ -1,4 +1,4 @@
-import 'package:app_resep_makanan/models/recipe_provider.dart';
+import 'package:app_resep_makanan/models/recipe_model.dart';
 import 'package:app_resep_makanan/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,6 +9,8 @@ import 'package:app_resep_makanan/pages/search_page.dart';
 import 'package:app_resep_makanan/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -30,31 +32,33 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool showFab = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 10,
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             buildNavBarItem('assets/icons/home.svg', 0),
-            SizedBox(),
+            const SizedBox(),
             buildNavBarItem('assets/icons/profile.svg', 1),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF042628),
-        onPressed: () => _onItemTapped(2),
-        child: SvgPicture.asset(
-          'assets/icons/search.svg',
-          color: Colors.white,
-          height: 30.0,
-        ),
-        shape: CircleBorder(),
-      ),
+      floatingActionButton: Visibility(
+          visible: !showFab,
+          child: FloatingActionButton(
+            backgroundColor: const Color(0xFF042628),
+            onPressed: () => _onItemTapped(2),
+            shape: CircleBorder(),
+            child: SvgPicture.asset(
+              'assets/icons/search.svg',
+              color: Colors.white,
+              height: 30.0,
+            ),
+          )),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -66,14 +70,31 @@ class _HomePageState extends State<HomePage> {
         svgPath,
         color: _selectedIndex == index
             ? const Color(0xFF70B9BE)
-            : Color(0xFF97A2B0),
+            : const Color(0xFF97A2B0),
         height: 35.0,
       ),
     );
   }
 }
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
+  const HomeContent({super.key});
+
+  @override
+  _HomeContentState createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final categoryModel = Provider.of<CategoryModel>(context, listen: false);
+      categoryModel.setSelectedCategory(0, context);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Provider.of<CategoryModel>(context);
@@ -177,35 +198,39 @@ class HomeContent extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10.0),
-            Consumer<RecipeProvider>(builder: (context, value, child) {
-              return value.recipes.isEmpty
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 20.0,
-                        childAspectRatio: 0.8,
-                      ),
-                      itemCount: value.recipes.length,
-                      itemBuilder: (context, index) {
-                        final recipe = value.recipes[index];
-                        return RecipeCard(
-                          imageUrl: recipe.urlGambar,
-                          title: recipe.namaMakanan,
-                          calories: recipe.kalori.toString(),
-                          time: recipe.waktuMasak.toString(),
-                          description: recipe.deskripsiMasakan,
-                          ingredients: recipe.bahan,
-                          instructions: recipe.instruksi,
-                        );
-                      },
-                    );
-            }),
+            Consumer<CategoryModel>(
+              builder: (context, categoryModel, child) {
+                List<Recipe> recipes = categoryModel.categoryRecipes;
+
+                return recipes.isEmpty
+                    ? const Center(child: CircularProgressIndicator())
+                    : GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 2.0,
+                          mainAxisSpacing: 10.0,
+                          childAspectRatio: 0.8,
+                        ),
+                        itemCount: recipes.length,
+                        itemBuilder: (context, index) {
+                          final recipe = recipes[index];
+                          return RecipeCard(
+                            key: ValueKey(recipe.namaMakanan),
+                            imageUrl: recipe.urlGambar,
+                            title: recipe.namaMakanan,
+                            calories: recipe.kalori.toString(),
+                            time: recipe.waktuMasak.toString(),
+                            description: recipe.deskripsiMasakan,
+                            ingredients: recipe.bahan,
+                            instructions: recipe.instruksi,
+                          );
+                        },
+                      );
+              },
+            ),
             const SizedBox(height: 30.0),
           ],
         ),
@@ -231,7 +256,9 @@ class HomeContent extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
-          onPressed: () => categoryModel.setSelectedCategory(index),
+          onPressed: () {
+            categoryModel.setSelectedCategory(index, context);
+          },
           child: Text(
             label,
             style: const TextStyle(
